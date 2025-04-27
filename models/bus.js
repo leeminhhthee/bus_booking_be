@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const SeatSchema = new Schema({
+export const SeatSchema = new Schema({
   seat_id: { type: Number, required: true },
   type: { type: String, enum: ["window", "side", "path" ], required: true },
   booked: { type: Boolean, default: false },
@@ -11,7 +11,7 @@ const BusSchema = new Schema({
   from: { type: String, required: true },
   to: { type: String, required: true },
   departureTime: { type: Date, required: true },
-  arrivaltime: { type: Date, required: true },
+  arrivalTime: { type: Date, required: true },
   duration: { type: String, required: true },
   availableSeats: { type: Number, required: true },
   price: { type: Number, required: true },

@@ -5,7 +5,7 @@ import User from '../models/user.js'
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 const generateTokens = (user) => {
-  const accesToken = jwt.sign(
+  const accessToken = jwt.sign(
     { userId: user?._id },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY}
@@ -17,11 +17,13 @@ const generateTokens = (user) => {
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
   )
 
-  return { accesToken, refreshToken }
+  return { accessToken, refreshToken }
 }
 
 const loginOrSignUp = async (req, res) => {
   const { id_token } = req.body
+
+  console.log(id_token)
 
   try {
     const ticket = await client.verifyIdToken({
@@ -52,11 +54,11 @@ const loginOrSignUp = async (req, res) => {
       await user.save()
     }
 
-    const { accesToken, refreshToken } = generateTokens(user.toObject())
+    const { accessToken, refreshToken } = generateTokens(user.toObject())
 
     res.status(200).json({
       user,
-      accesToken,
+      accessToken,
       refreshToken,
       isNewUser,
     })

@@ -2,42 +2,27 @@ import Bus from "../models/bus.js";
 
 export const getBusDetails = async (req, res) => {
   try {
-    const { busId } = req.params
+    const { busId } = req.params;
     if (!busId) {
-      return res.status(400).json({ error: "Bus ID is required" })
+      return res.status(400).json({ error: "Bus ID is required" });
     }
 
-    const bus = await Bus.findOne({busId})
-
-    if(!bus) {
-      return res.status(404).json({ error: "Bus not found" })
+    // Sử dụng lean() để nhận về plain JS object, không kèm methods của mongoose document
+    const bus = await Bus.findOne({ busId }).lean();
+    if (!bus) {
+      return res.status(404).json({ error: "Bus not found" });
     }
 
-    res.status(200).json({
+    // Trả về đúng dữ liệu chuyến xe
+    return res.status(200).json({
       success: true,
-      data: {
-        busId: { type: String, required: true, unique: true },
-        from: { type: String, required: true },
-        to: { type: String, required: true },
-        departureTime: { type: Date, required: true },
-        arrivaltime: { type: Date, required: true },
-        duration: { type: String, required: true },
-        availableSeats: { type: Number, required: true },
-        price: { type: Number, required: true },
-        originalPrice: { type: Number, required: true },
-        company: { type: String, required: true },
-        busType: { type: String, required: true },
-        rating: { type: Number, default: 0 },
-        totalReviews: { type: Number, default: 0 },
-        badges: [{ type: String }],
-        seats: [[SeatSchema]],
-      }
-    })
+      data: bus
+    });
   } catch (error) {
-    console.error("error fetching bus details: ",error)
-    res.status(500).json({ error: "Internal Server Error" })
+    console.error("error fetching bus details:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 export const searchBuses = async (req, res) => {
   try {

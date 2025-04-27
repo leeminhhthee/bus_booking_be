@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 export const getUserTickets = async (req, res) => {
   try {
     const userId = req.userId
+    console.log('userid ', userId)
 
     const tickets = await Ticket.find({ user: userId })
       .populate(
@@ -14,11 +15,12 @@ export const getUserTickets = async (req, res) => {
       )
       .sort({ bookedAt: -1 })
 
-      if (!tickets || tickets.length ===0 ) {
-        return res.status(404).json({ error: "No tickets found" })
-      }
+    if (!tickets || tickets.length === 0 ) {
+      return res.status(404).json({ error: "No tickets found" })
+    }
+    
+    res.status(200).json({ success: true, tickets: tickets || [] })
 
-      res.status(200).json({ success: true, tickets: tickets || [] })
   } catch (error) {
     console.error("Error fetching ticket: ",error)
     res.status(500).json({ error: "Internal server error" })
