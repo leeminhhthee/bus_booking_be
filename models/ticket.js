@@ -12,7 +12,7 @@ const TicketSchema = new Schema({
     default: "Upcoming"
   },
   bookAt: { type: Date, default: Date.now },
-  pr: { type: String, unique: true, required: true },
+  pnr: { type: String, unique: true, required: true },
 });
 
 const Ticket = mongoose.model("Ticket", TicketSchema)

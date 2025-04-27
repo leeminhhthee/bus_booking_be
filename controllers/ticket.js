@@ -46,11 +46,11 @@ export const bookTicket = async (req, res) => {
         row?.some((seat) => seat.seat_id === seatNum && seat.booked)
       )
     })
-    if (unavailableSeats.length > 0) {
+    if (unavailableSeats?.length > 0) {
       return res.status(400).json({ error: "Some seats are already booked.", unavailableSeats })
     }
 
-    const totalFare = bus.price * seatNumbers*length;
+    const totalFare = bus.price * seatNumbers?.length;
 
     const newTicket = new Ticket({
       user: userId,
@@ -76,7 +76,7 @@ export const bookTicket = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "ticket book succesfully",
-      tiket: newTicket,
+      ticket: newTicket,
     })
   } catch (error) {
     console.error("Error booking ticket: ",error)
